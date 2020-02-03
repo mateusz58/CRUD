@@ -30,7 +30,7 @@ application.properties
 
 # cmd files ##
 *.cmd
-
+""
 # mvnw file
 mvnw
 

@@ -23,7 +23,7 @@ public class TrelloController {
 	}
 
 	@GetMapping(value = "getTrelloBoards")
-	public ResponseEntity<?> getTasks() {
+	public ResponseEntity<?> getBoards() {
 		return new ResponseEntity<>(service.getTrelloBoards(), HttpStatus.OK);
 	}
 

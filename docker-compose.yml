@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'kodilla_course'
+      MYSQL_USER: 'kodilla_user'
+      MYSQL_PASSWORD: 'kodilla_password'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - '3306:3306'
+      -  '33060:33060'
+    expose:
+      - '3306'
+      - '33060'
+    volumes:
+      - mysql-db:/var/lib/mysql
+volumes:
+  mysql-db:

@@ -32,11 +32,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-  //  compile 'mysql:mysql-connector-java'
-    compile ('org.postgresql:postgresql')
+    compile 'mysql:mysql-connector-java'
+//    compile ('org.postgresql:postgresql')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile 'org.projectlombok:lombok:1.18.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
-
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.17.0'
    // providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

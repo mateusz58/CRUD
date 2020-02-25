@@ -34,7 +34,7 @@ public class EmailScheduler {
 			simpleEmailService.send(Mail.builder()
 					.mailTo(adminConfig.getAdminMail())
 					.subject(SUBJECT)
-					.message(String.format("Currently in database you got %d tasks", "%d"))
+					.message(String.format("Currently in database you got %d tasks", size))
 					.build());
 		}
 	}

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import tasks.client.TrelloClient;
-import tasks.domain.TaskDto;
+import tasks.domain.Task;
 import tasks.service.DbService;
 
 @RestController
@@ -31,9 +31,9 @@ public class TaskController {
 		this.trelloClient = trelloClient;
 	}
 
-	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all tasks in database", response = TaskDto[].class)
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "OK", response = TaskDto[].class),
+	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all tasks in database", response = Task[].class)
+	@ApiResponses( {
+			@ApiResponse(code = 200, message = "OK", response = Task[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@GetMapping
@@ -44,7 +44,7 @@ public class TaskController {
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Delete by Id", notes = "Deletes task with specific Id")
-	@ApiResponses({
+	@ApiResponses( {
 			@ApiResponse(code = 204, message = "Removed"),
 			@ApiResponse(code = 404, message = "Task not found"),
 			@ApiResponse(code = 500, message = "Internal server error")
@@ -54,27 +54,27 @@ public class TaskController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all invoices in database", response = TaskDto[].class)
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "OK", response = TaskDto[].class),
+	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all invoices in database", response = Task[].class)
+	@ApiResponses( {
+			@ApiResponse(code = 200, message = "OK", response = Task[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@PutMapping
-	public TaskDto updateTask(@RequestBody TaskDto taskDto) {
-		return new TaskDto();
+	public Task updateTask(@RequestBody Task task) {
+		return new Task();
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(value = "Add new task", notes = "Add new task to database", response = TaskDto.class)
-	@ApiResponses({
-			@ApiResponse(code = 201, message = "Created", response = TaskDto[].class),
+	@ApiOperation(value = "Add new task", notes = "Add new task to database", response = Task.class)
+	@ApiResponses( {
+			@ApiResponse(code = 201, message = "Created", response = Task[].class),
 			@ApiResponse(code = 400, message = "Bad request"),
 			@ApiResponse(code = 406, message = "Not acceptable format"),
 			@ApiResponse(code = 409, message = "Task exists"),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@PostMapping
-	public void createTask(@RequestBody TaskDto taskDto){
-		service.createTask(taskDto);
+	public void createTask(@RequestBody Task task) {
+		service.createTask(task);
 	}
 }

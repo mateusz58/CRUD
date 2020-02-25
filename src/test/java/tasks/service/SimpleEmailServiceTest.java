@@ -46,6 +46,6 @@ class SimpleEmailServiceTest {
 		simpleEmailService.send(mail);
 
 		//then
-		verify(javaMailSender,times(1)).send(simpleMailMessage);
+		verify(javaMailSender, times(1)).send(simpleMailMessage);
 	}
 }

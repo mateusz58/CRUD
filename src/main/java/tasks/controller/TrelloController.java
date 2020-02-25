@@ -28,7 +28,7 @@ public class TrelloController {
 	}
 
 	@ApiOperation(value = "Get all boards from trello API", notes = "Retrieving the collection of all boards from trello api", response = TrelloBoardDto[].class)
-	@ApiResponses({
+	@ApiResponses( {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
@@ -38,7 +38,7 @@ public class TrelloController {
 	}
 
 	@ApiOperation(value = "Get all boards from trello API", notes = "Retrieving the collection of all boards containing kodilla from trello api", response = TrelloBoardDto[].class)
-	@ApiResponses({
+	@ApiResponses( {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
@@ -53,7 +53,7 @@ public class TrelloController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Add new invoice", notes = "Add new card to trello", response = CreatedTrelloCardDto.class)
-	@ApiResponses({
+	@ApiResponses( {
 			@ApiResponse(code = 201, message = "Created", response = CreatedTrelloCardDto.class),
 			@ApiResponse(code = 400, message = "Bad request"),
 			@ApiResponse(code = 406, message = "Not acceptable format"),

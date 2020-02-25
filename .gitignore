@@ -46,4 +46,4 @@ build/
 .vscode/
 
 ## out ###
-/out
+out/*

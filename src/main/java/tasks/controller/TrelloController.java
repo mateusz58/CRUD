@@ -10,13 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import tasks.domain.CreatedTrelloCardDto;
 import tasks.domain.TrelloBoardDto;
 import tasks.domain.TrelloCardDto;
 import tasks.service.TrelloService;
 
 @RestController
-@RequestMapping("api/v1/boards")
+@RequestMapping("api/v1/boards/")
 public class TrelloController {
 
 	TrelloService service;
@@ -30,7 +32,7 @@ public class TrelloController {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
-	@GetMapping(value = "boards")
+	@GetMapping
 	public ResponseEntity<?> getBoards() {
 		return new ResponseEntity<>(service.getTrelloBoards(), HttpStatus.OK);
 	}
@@ -40,7 +42,7 @@ public class TrelloController {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
-	@GetMapping(value = "boards/kodilla")
+	@GetMapping(value = "kodilla")
 	public ResponseEntity<?> getBoardKodilla() {
 		Optional<TrelloBoardDto> trelloBoardDto = service.getTrelloBoards().stream().filter(s -> s.getName().contains("Kodilla")).findFirst();
 		if (!trelloBoardDto.isPresent()) {
@@ -49,6 +51,15 @@ public class TrelloController {
 		return new ResponseEntity<>(trelloBoardDto.get(), HttpStatus.OK);
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
+	@ApiOperation(value = "Add new invoice", notes = "Add new card to trello", response = CreatedTrelloCardDto.class)
+	@ApiResponses({
+			@ApiResponse(code = 201, message = "Created", response = CreatedTrelloCardDto.class),
+			@ApiResponse(code = 400, message = "Bad request"),
+			@ApiResponse(code = 406, message = "Not acceptable format"),
+			@ApiResponse(code = 409, message = "Invoice exists"),
+			@ApiResponse(code = 500, message = "Internal server error")
+	})
 	@PostMapping(value = "cards")
 	public ResponseEntity<?> createdTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
 		return new ResponseEntity<>(service.createTrelloCard(trelloCardDto), HttpStatus.ACCEPTED);

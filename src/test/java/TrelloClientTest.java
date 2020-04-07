@@ -4,22 +4,22 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
-import tasks.client.TrelloClient;
-import tasks.client.TrelloConfig;
-import tasks.domain.TrelloBoardDto;
+import tasks.client.ClientRestTemplateHelper;
+import tasks.configuration.TrelloConfig;
+import tasks.domain.dto.TrelloBoardDto;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class TrelloClientTest {
 
 	@InjectMocks
-	private TrelloClient trelloClient;
+	private ClientRestTemplateHelper trelloClient;
 
 	@Mock
 	private RestTemplate restTemplate;
@@ -27,7 +27,7 @@ public class TrelloClientTest {
 	@Mock
 	private TrelloConfig trelloConfig;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		when(trelloConfig.getTrelloApiEndpoint()).thenReturn("http://test.com");
 		when(trelloConfig.getTrelloAppKey()).thenReturn("test");
@@ -43,7 +43,7 @@ public class TrelloClientTest {
 		when(restTemplate.getForObject(uri, TrelloBoardDto[].class)).thenReturn(null);
 
 		//When
-		List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards();
+		List<TrelloBoardDto> trelloBoards = trelloClient.getForList(TrelloBoardDto.class, trelloConfig.urlGetBoards().toString());
 
 		//Then
 		assertEquals(0, trelloBoards.size());

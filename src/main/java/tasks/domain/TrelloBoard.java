@@ -5,13 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class TrelloList {
+@Builder
+public final class TrelloBoard {
 
 	private String id;
+
 	private String name;
-	private boolean isClosed;
+
+	private List<TrelloList> lists;
 }

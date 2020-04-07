@@ -1,5 +1,6 @@
 #### Gradle files
 !*.gradle
+/grale
 
 HELP.md
 target/
@@ -22,7 +23,7 @@ target/
 *.iml
 *.ipr
 
-## Application properties ##
+## com.kodilla.patterns2.Application properties ##
 application.properties
 
 # Jar files ##
@@ -47,3 +48,13 @@ build/
 
 ## out ###
 out/*
+
+## idea ###
+*.imk
+.idea/
+auto-generate
+
+## docker related
+mysql8.0
+services/*
+my.cnf/*

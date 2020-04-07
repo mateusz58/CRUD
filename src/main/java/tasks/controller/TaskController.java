@@ -3,32 +3,26 @@ package tasks.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import tasks.client.TrelloClient;
+import org.springframework.web.bind.annotation.*;
+import tasks.client.ClientRestTemplateHelper;
 import tasks.domain.Task;
 import tasks.service.DbService;
 
 @RestController
 @RequestMapping("api/v1/tasks")
+@CrossOrigin(origins = "*")
+@Slf4j
 public class TaskController {
 
-
 	DbService service;
-	TrelloClient trelloClient;
 
-	public TaskController(DbService service, TrelloClient trelloClient) {
+	@Autowired
+	public TaskController(DbService service) {
 		this.service = service;
-		this.trelloClient = trelloClient;
 	}
 
 	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all tasks in database", response = Task[].class)
@@ -41,6 +35,23 @@ public class TaskController {
 		return new ResponseEntity<>(service.getTasks(), HttpStatus.OK);
 	}
 
+	@ApiOperation(value = "Get all tasks", notes = "Retrieving the collection of all tasks in database", response = Task[].class)
+	@ApiResponses( {
+			@ApiResponse(code = 200, message = "OK", response = Task[].class),
+			@ApiResponse(code = 500, message = "Internal server error")
+	})
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<?> getTask(@PathVariable Long id) {
+		try {
+			if(id == null) {
+				throw new IllegalArgumentException("Passed parameter is null");
+			}
+			return new ResponseEntity<>(service.getTask(id), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("An error occured while sending request", e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value = "Delete by Id", notes = "Deletes task with specific Id")
@@ -50,7 +61,10 @@ public class TaskController {
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@DeleteMapping(params = {"id"})
-	public ResponseEntity<?> deleteTask(@RequestParam(value = "id") Long taskId) {
+	public ResponseEntity<?> deleteTask(@RequestParam(value = "id") Long id) {
+		if(id == null) {
+			throw new IllegalArgumentException("Passed parameter is null");
+		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
@@ -59,7 +73,7 @@ public class TaskController {
 			@ApiResponse(code = 200, message = "OK", response = Task[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
-	@PutMapping
+	@PutMapping("/{id}")
 	public Task updateTask(@RequestBody Task task) {
 		return new Task();
 	}
@@ -75,6 +89,13 @@ public class TaskController {
 	})
 	@PostMapping
 	public void createTask(@RequestBody Task task) {
-		service.createTask(task);
+		if(task == null) {
+			throw new IllegalArgumentException("Passed parameter is null");
+		}
+		try {
+			service.createTask(task);
+		} catch (Exception e) {
+			log.error("An error occured during getting task {}", e.getCause());
+		}
 	}
 }

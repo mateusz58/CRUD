@@ -1,4 +1,4 @@
-package tasks.domain;
+package tasks.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class Mail {
+@Builder
+public  class TaskDto {
 
-	private String mailTo;
-	private String subject;
-	private String message;
-	private String toCc;
+    private Long id;
+
+    private String title;
+
+    private String content;
 }

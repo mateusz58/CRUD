@@ -1,0 +1,6 @@
+# Project description
+This is a simple RESTful CRUD application implemented in Java which accomplishes both server-side and client-side functionality. The application provides REST API for communication with [Trello API](https://developers.trello.com/reference#introduction). Basically, it allows you to create simple tasks consisting of name and content by filling text fields and clicking button `Add a task`. The Task is going to be persisted in the database. After that, you will be able to manage that task by buttons `Edit` and `Delete`. Moreover, you can create a new card in my Trello account by choosing Board and List, in which the card is going to be created, and click the button `Create a card`.
+It also allows sending notification email regarding created trello card. In order to do that type your email addres in application.properties file.
+
+# Project objective 
+The main purpose of this project was to play a little bit with [Spring](https://spring.io/) and [Hibernate](https://hibernate.org/) frameworks, learn how to design architecture for simple RESTful web service. Learn how to write REST Controller classes and how to send HTTP requests in Java code. The secondary goal was to learn how to write unit tests for controller and client classes with [JUnit](https://junit.org/junit5/) and [Mockito](https://site.mockito.org/) frameworks. 

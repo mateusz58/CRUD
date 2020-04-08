@@ -36,7 +36,8 @@ public class TrelloController {
 	})
 	@GetMapping(value = "boards")
 	public ResponseEntity<?> getBoards() {
-		return new ResponseEntity<>(service.fetchAndValidateTrelloBoards(), HttpStatus.OK);
+		Collection<TrelloBoardDto> trelloBoardDtos = service.fetchAndValidateTrelloBoards();
+		return new ResponseEntity<>(trelloBoardDtos, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get all boards from trello API", notes = "Retrieving the collection of all boards containing kodilla from trello api", response = TrelloBoardDto[].class)

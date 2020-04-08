@@ -20,7 +20,7 @@ public class DbService {
 
 	private DtoEntityMapper dtoEntityMapper;
 
-	public DbService(TaskRepository repository, DtoEntityMapper dtoEntityMapper) {
+	public DbService(TaskRepository repository, @Qualifier("TaskMapper") DtoEntityMapper dtoEntityMapper) {
 		this.repository = repository;
 		this.dtoEntityMapper = dtoEntityMapper;
 	}

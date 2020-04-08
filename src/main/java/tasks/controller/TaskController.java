@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tasks.client.ClientRestTemplateHelper;
 import tasks.domain.Task;
+import tasks.domain.dto.TaskDto;
+import tasks.exception.BadRequestException;
+import tasks.exception.NotFoundException;
 import tasks.service.DbService;
 
 @RestController
@@ -61,9 +63,14 @@ public class TaskController {
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@DeleteMapping(params = {"id"})
-	public ResponseEntity<?> deleteTask(@RequestParam(value = "id") Long id) {
+	public ResponseEntity<?> deleteTask(@RequestParam(value = "id") Long id) throws NotFoundException {
 		if(id == null) {
 			throw new IllegalArgumentException("Passed parameter is null");
+		}
+		try {
+			service.deleteTask(id);
+		} catch (Exception e) {
+			log.error("An error occured during updating task {}", e.getCause());
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
@@ -74,8 +81,15 @@ public class TaskController {
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@PutMapping("/{id}")
-	public Task updateTask(@RequestBody Task task) {
-		return new Task();
+	public ResponseEntity<?> updateTask(@RequestBody Task task, @PathVariable Long id) throws BadRequestException {
+		if (task == null) {
+			throw new IllegalArgumentException("Passed parameter is null");
+		}
+		if (task.getId() != id) {
+			throw new BadRequestException(BadRequestException.badRequestMessage(String.format("Task with id %d", task.getId())));
+		}
+		TaskDto taskDto = service.updateTask(task);
+		return new ResponseEntity<TaskDto>(taskDto, HttpStatus.CREATED);
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
@@ -88,14 +102,11 @@ public class TaskController {
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@PostMapping
-	public void createTask(@RequestBody Task task) {
-		if(task == null) {
+	public ResponseEntity<?> createTask(@RequestBody Task task) throws BadRequestException {
+		if (task == null) {
 			throw new IllegalArgumentException("Passed parameter is null");
 		}
-		try {
-			service.createTask(task);
-		} catch (Exception e) {
-			log.error("An error occured during getting task {}", e.getCause());
-		}
+		TaskDto taskDto = service.createTask(task);
+		return new ResponseEntity<TaskDto>(taskDto, HttpStatus.CREATED);
 	}
 }

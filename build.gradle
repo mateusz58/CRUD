@@ -45,5 +45,6 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.22.0'
     compile('io.springfox:springfox-swagger2:2.7.0')
     compile('io.springfox:springfox-swagger-ui:2.7.0')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
     // providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }

@@ -1,41 +1,39 @@
 package tasks.scheduler;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tasks.configuration.AdminConfig;
 import tasks.domain.Mail;
 import tasks.repository.TaskRepository;
+import tasks.service.EmailTemplateSelector;
 import tasks.service.SimpleEmailService;
 
 @Component
 public class EmailScheduler {
 
-	private static final String SUBJECT = "Task: Once a day email";
 	private SimpleEmailService simpleEmailService;
-	private AdminConfig adminConfig;
+
 	private TaskRepository taskRepository;
 
-	public EmailScheduler(SimpleEmailService simpleEmailService, AdminConfig adminConfig, TaskRepository taskRepository) {
+	private AdminConfig adminConfig;
+
+	private static final String SUBJECT = "Tasks: Once a day email";
+
+	public EmailScheduler(SimpleEmailService simpleEmailService, TaskRepository taskRepository, AdminConfig adminConfig) {
 		this.simpleEmailService = simpleEmailService;
-		this.adminConfig = adminConfig;
 		this.taskRepository = taskRepository;
+		this.adminConfig = adminConfig;
 	}
 
 	@Scheduled(cron = "0 0 10 * * *")
 	public void sendInformationEmail() {
 		long size = taskRepository.count();
-		if (size == 1) {
-			simpleEmailService.send(Mail.builder()
-					.mailTo(adminConfig.getAdminMail())
-					.subject(SUBJECT)
-					.message("Currently in database you got 1 task")
-					.build());
-		} else {
-			simpleEmailService.send(Mail.builder()
-					.mailTo(adminConfig.getAdminMail())
-					.subject(SUBJECT)
-					.message(String.format("Currently in database you got %d tasks", size))
-					.build());
-		}
+		String taskOrTasks = size == 1 ? " task" : " tasks";
+		simpleEmailService.send(new Mail(
+				adminConfig.getAdminMail(),
+				SUBJECT,
+				"Currently in database you've got: " + size + taskOrTasks
+		), EmailTemplateSelector.SCHEDULED_EMAIL);
 	}
 }

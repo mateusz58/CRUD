@@ -3,6 +3,8 @@ package tasks.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import java.util.Collection;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,7 @@ import tasks.domain.dto.TrelloCardDto;
 import tasks.service.ServiceFacade;
 
 @RestController
-@RequestMapping("api/v1/boards/")
+@RequestMapping("api/v1/trello/")
 public class TrelloController {
 
 	ServiceFacade service;
@@ -32,9 +34,9 @@ public class TrelloController {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
-	@GetMapping
+	@GetMapping(value = "boards")
 	public ResponseEntity<?> getBoards() {
-		return new ResponseEntity<>(service, HttpStatus.OK);
+		return new ResponseEntity<>(service.fetchAndValidateTrelloBoards(), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get all boards from trello API", notes = "Retrieving the collection of all boards containing kodilla from trello api", response = TrelloBoardDto[].class)
@@ -42,7 +44,7 @@ public class TrelloController {
 			@ApiResponse(code = 200, message = "OK", response = TrelloBoardDto[].class),
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
-	@GetMapping(value = "kodilla")
+	@GetMapping(value = "boards/kodilla")
 	public ResponseEntity<?> getBoardKodilla() {
 		Optional<TrelloBoardDto> trelloBoardDto = service.fetchAndValidateTrelloBoards().stream().filter(s -> s.getName().contains("Kodilla")).findFirst();
 		if (!trelloBoardDto.isPresent()) {
@@ -61,8 +63,11 @@ public class TrelloController {
 			@ApiResponse(code = 500, message = "Internal server error")
 	})
 	@PostMapping(value = "cards")
-	public ResponseEntity<?> createdTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
+	public ResponseEntity<?> createTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
 		try {
+			if(trelloCardDto == null) {
+				throw new IllegalArgumentException("Passed arguments are equal null");
+			}
 			return new ResponseEntity<>(service.postCartCreate(trelloCardDto), HttpStatus.ACCEPTED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

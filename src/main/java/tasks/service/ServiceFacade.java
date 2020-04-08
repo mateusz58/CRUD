@@ -1,14 +1,12 @@
 package tasks.service;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import tasks.domain.TrelloBoard;
 import tasks.domain.TrelloCard;
-import tasks.domain.dto.CreatedTrelloCardDto;
+import tasks.domain.dto.ResponseTrelloCartDto;
 import tasks.domain.dto.TrelloBoardDto;
 import tasks.domain.dto.TrelloCardDto;
 import tasks.domain.mapper.DtoEntityMapper;
@@ -42,9 +40,9 @@ public class ServiceFacade {
 		return mapperBoards.toDto(filteredBoards);
 	}
 
-	public CreatedTrelloCardDto postCartCreate(final TrelloCardDto trelloCardDto) {
+	public ResponseTrelloCartDto postCartCreate(final TrelloCardDto trelloCardDto) {
 		TrelloCard trelloCard = (TrelloCard) mapperCarts.toEntity(trelloCardDto);
 		trelloValidator.validateCard(trelloCard);
-		return trelloService.createCartEntityAndNotifyViaEmail((TrelloCardDto) mapperCarts.toDto(trelloCard));
+		return trelloService.createTrelloCardAndSendEmailNotification((TrelloCardDto) mapperCarts.toDto(trelloCard));
 	}
 }

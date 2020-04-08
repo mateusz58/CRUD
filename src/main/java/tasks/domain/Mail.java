@@ -1,18 +1,21 @@
 package tasks.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public final class Mail {
 
+	@NonNull
 	private String mailTo;
+
+	@NonNull
 	private String subject;
+
+	@NonNull
 	private String message;
+
 	private String toCc;
 }

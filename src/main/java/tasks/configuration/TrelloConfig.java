@@ -14,32 +14,15 @@ import java.net.URI;
 public class TrelloConfig {
 
 	@Value("${trello.api.endpoint.prod}")
-	private  String trelloApiEndpoint;
+	private String trelloApiEndpoint;
 
 	@Value("${trello.app.key}")
-	private  String trelloAppKey;
+	private String trelloAppKey;
 
 	@Value("${trello.app.token}")
 	private String trelloToken;
 
 	@Value("${trello.app.username}")
 	private String trelloUsername;
-
-	public URI urlGetBoards() {
-		return UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/" +
-				trelloUsername + "/boards")
-				.queryParam("key", trelloAppKey)
-				.queryParam("token", trelloToken)
-				.queryParam("fields", "name,id")
-				.queryParam("lists", "all").build().encode().toUri();
-	}
-
-	public URI urlCreateCard() {
-		return UriComponentsBuilder.fromHttpUrl(trelloApiEndpoint + "/members/" +
-				trelloUsername + "/boards")
-				.queryParam("key", trelloAppKey)
-				.queryParam("token", trelloToken)
-				.queryParam("fields", "name,id")
-				.queryParam("lists", "all").build().encode().toUri();
-	}
 }
+

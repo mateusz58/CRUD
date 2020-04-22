@@ -1,19 +1,22 @@
 package tasks.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import tasks.domain.DTO;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public  class TaskDto {
-
-    private Long id;
+public  class TaskDto extends DTO<Long> {
 
     private String title;
 
     private String content;
+
+    @Builder
+    public TaskDto(Long id, String title, String content) {
+        super(id);
+        this.title = title;
+        this.content = content;
+    }
 }

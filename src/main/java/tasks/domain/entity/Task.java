@@ -1,4 +1,4 @@
-package tasks.domain;
+package tasks.domain.entity;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
@@ -6,24 +6,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
+import lombok.*;
+import tasks.domain.ENTITY;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "tasks")
-public  class Task implements Serializable {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public  class Task extends ENTITY<Long> {
 
 	private String title;
 
 	private String content;
+
+	@Builder
+	public Task(Long id, String title, String content) {
+		super(id);
+		this.title = title;
+		this.content = content;
+	}
 }

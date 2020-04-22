@@ -1,6 +1,8 @@
 package tasks.domain.mapper;
 
 import org.springframework.stereotype.Component;
+import tasks.domain.DTO;
+import tasks.domain.ENTITY;
 
 import java.util.List;
 

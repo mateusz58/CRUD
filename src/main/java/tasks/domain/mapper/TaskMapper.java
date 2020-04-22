@@ -2,7 +2,7 @@ package tasks.domain.mapper;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import tasks.domain.Task;
+import tasks.domain.entity.Task;
 import tasks.domain.dto.TaskDto;
 
 import java.util.List;
@@ -14,18 +14,26 @@ public class TaskMapper implements DtoEntityMapper<Task, TaskDto> {
 
     @Override
     public Task toEntity(TaskDto object) {
-        return new Task(
-                object.getId(),
-                object.getTitle(),
-                object.getContent());
+        if (object == null) {
+            return null;
+        }
+        Task objectToReturn = new Task();
+        objectToReturn.setId(object.getId());
+        objectToReturn.setContent(object.getContent());
+        objectToReturn.setTitle(object.getTitle());
+        return objectToReturn;
     }
 
     @Override
     public TaskDto toDto(Task object) {
-        return new TaskDto(
-                object.getId(),
-                object.getTitle(),
-                object.getContent());
+        if (object == null) {
+            return null;
+        }
+        TaskDto objectToReturn = new TaskDto();
+        objectToReturn.setId(object.getId());
+        objectToReturn.setContent(object.getContent());
+        objectToReturn.setTitle(object.getTitle());
+        return objectToReturn;
     }
 
     @Override

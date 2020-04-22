@@ -1,11 +1,10 @@
 package tasks.scheduler;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tasks.configuration.AdminConfig;
 import tasks.domain.Mail;
-import tasks.repository.TaskRepository;
+import tasks.dao.TaskDao;
 import tasks.service.EmailTemplateSelector;
 import tasks.service.SimpleEmailService;
 
@@ -14,13 +13,13 @@ public class EmailScheduler {
 
 	private SimpleEmailService simpleEmailService;
 
-	private TaskRepository taskRepository;
+	private TaskDao taskRepository;
 
 	private AdminConfig adminConfig;
 
 	private static final String SUBJECT = "Tasks: Once a day email";
 
-	public EmailScheduler(SimpleEmailService simpleEmailService, TaskRepository taskRepository, AdminConfig adminConfig) {
+	public EmailScheduler(SimpleEmailService simpleEmailService, TaskDao taskRepository, AdminConfig adminConfig) {
 		this.simpleEmailService = simpleEmailService;
 		this.taskRepository = taskRepository;
 		this.adminConfig = adminConfig;

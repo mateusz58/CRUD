@@ -12,25 +12,29 @@ import java.util.stream.Collectors;
 @Qualifier("CartMapper")
 public class CartMapper implements DtoEntityMapper<TrelloCard, TrelloCardDto> {
 
-    @Override
-    public TrelloCard toEntity(TrelloCardDto object) {
-        return new TrelloCard(object.getName(), object.getDescription(), object.getPos(),
-                object.getListId());
+    public TrelloCardDto toDto(final TrelloCard trelloCard){
+        return new TrelloCardDto(trelloCard.getName(), trelloCard.getDescription(),
+                trelloCard.getPos(), trelloCard.getListId());
     }
 
-    @Override
-    public TrelloCardDto toDto(TrelloCard object) {
-        return new TrelloCardDto(object.getName(), object.getDescription(), object.getPos(),
-                object.getListId());
+    public TrelloCard toEntity(final TrelloCardDto trelloCardDto){
+        return new TrelloCard(trelloCardDto.getName(), trelloCardDto.getDescription(),
+                trelloCardDto.getPos(), trelloCardDto.getListId());
     }
 
     @Override
     public List<TrelloCardDto> toDto(List<TrelloCard> objects) {
+        if(objects == null) {
+            return null;
+        }
         return objects.stream().map(o -> toDto(o)).collect(Collectors.toList());
     }
 
     @Override
     public List<TrelloCard> toEntity(List<TrelloCardDto> objects) {
+        if(objects == null) {
+            return null;
+        }
         return objects.stream().map(o -> toEntity(o)).collect(Collectors.toList());
     }
 }

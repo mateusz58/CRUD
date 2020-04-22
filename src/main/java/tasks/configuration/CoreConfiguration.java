@@ -18,10 +18,4 @@ public class CoreConfiguration {
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
-
-	@Bean
-	@Primary
-	public ObjectMapper objectMapper() {
-		return new ObjectMapper();
-	}
 }

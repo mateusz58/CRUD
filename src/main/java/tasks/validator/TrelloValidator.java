@@ -3,7 +3,7 @@ package tasks.validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import tasks.domain.TrelloBoard;
+import tasks.domain.dto.TrelloBoardDto;
 import tasks.domain.TrelloCard;
 
 import java.util.List;
@@ -11,21 +11,22 @@ import java.util.stream.Collectors;
 
 @Component
 public class TrelloValidator {
-    private final static Logger LOGGER = LoggerFactory.getLogger(TrelloValidator.class);
+    private final static Logger log = LoggerFactory.getLogger(TrelloValidator.class);
 
     public void validateCard(final TrelloCard trelloCard) {
         if(trelloCard.getName().contains("test")) {
-            LOGGER.info("Someone is testing my application");
+            log.info("Someone is testing my application");
         } else {
-            LOGGER.info("Seems that my application is used in proper way.");
+            log.info("Seems that my application is used in proper way.");
         }
     }
-    public List<TrelloBoard> validateTrelloBoards(final List<TrelloBoard> trelloBoards) {
-        LOGGER.info("Starting filtering boards...");
-        List<TrelloBoard> filteredBoards = trelloBoards.stream()
+
+    public List<TrelloBoardDto> validateTrelloBoards(final List<TrelloBoardDto> trelloBoards) {
+        log.info("Starting filtering boards...");
+        List<TrelloBoardDto> filteredBoards = trelloBoards.stream()
                 .filter(trelloBoard -> !trelloBoard.getName().equalsIgnoreCase("test"))
                 .collect(Collectors.toList());
-        LOGGER.info("Boards have been filtered. Current list size: " + filteredBoards.size());
+        log.info("Boards have been filtered. Current list size: " + filteredBoards.size());
         return filteredBoards;
     }
 }

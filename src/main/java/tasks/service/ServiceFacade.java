@@ -1,48 +1,59 @@
 package tasks.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import tasks.domain.TrelloBoard;
-import tasks.domain.TrelloCard;
-import tasks.domain.dto.ResponseTrelloCartDto;
+import tasks.configuration.AdminConfig;
+import tasks.domain.Mail;
 import tasks.domain.dto.TrelloBoardDto;
+import tasks.domain.TrelloCard;
+import tasks.domain.dto.CreatedTrelloCartDto;
 import tasks.domain.dto.TrelloCardDto;
-import tasks.domain.mapper.DtoEntityMapper;
+import tasks.domain.mapper.CartMapper;
+import tasks.exception.BadRequestException;
 import tasks.validator.TrelloValidator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceFacade {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServiceFacade.class);
+    private TrelloServiceClient trelloClientService;
 
-	private TrelloService trelloService;
+    private TrelloValidator trelloValidator;
 
-	private TrelloValidator trelloValidator;
+    private CartMapper mapperCarts;
 
-	private DtoEntityMapper mapperBoards;
+    private  SimpleEmailService simpleEmailService;
 
-	private DtoEntityMapper mapperCarts;
+    private AdminConfig adminConfig;
 
-	public ServiceFacade(TrelloService trelloService, TrelloValidator trelloValidator, @Qualifier("BoardMapper") DtoEntityMapper mapperBoards, @Qualifier("CartMapper") DtoEntityMapper mapperCarts) {
-		this.trelloService = trelloService;
-		this.trelloValidator = trelloValidator;
-		this.mapperBoards = mapperBoards;
-		this.mapperCarts = mapperCarts;
-	}
 
-	public List<TrelloBoardDto> fetchAndValidateTrelloBoards() {
-		List<TrelloBoard> trelloBoards = mapperBoards.toDto(trelloService.fetchTrelloBoards());
-		List<TrelloBoard> filteredBoards = trelloValidator.validateTrelloBoards(trelloBoards);
-		return mapperBoards.toDto(filteredBoards);
-	}
+    public ServiceFacade(TrelloServiceClient trelloClientService, TrelloValidator trelloValidator, CartMapper mapperCarts, SimpleEmailService simpleEmailService, AdminConfig adminConfig) {
+        this.trelloClientService = trelloClientService;
+        this.trelloValidator = trelloValidator;
+        this.mapperCarts = mapperCarts;
+        this.simpleEmailService = simpleEmailService;
+        this.adminConfig = adminConfig;
+    }
 
-	public ResponseTrelloCartDto postCartCreate(final TrelloCardDto trelloCardDto) {
-		TrelloCard trelloCard = (TrelloCard) mapperCarts.toEntity(trelloCardDto);
-		trelloValidator.validateCard(trelloCard);
-		return trelloService.createTrelloCardAndSendEmailNotification((TrelloCardDto) mapperCarts.toDto(trelloCard));
-	}
+    private void sendEmail(CreatedTrelloCartDto object, String subject, String email) {
+        Optional.ofNullable(object).ifPresent(card ->
+                simpleEmailService.send(new Mail(
+                        email,
+                        subject,
+                        "New card: " + object.getName() + " has been created on your Trello account"
+                ), EmailTemplateSelector.TRELLO_CARD_EMAIL));
+    }
+
+    public List<TrelloBoardDto> fetchAndValidateTrelloBoards() {
+        return trelloValidator.validateTrelloBoards(trelloClientService.fetchAll());
+    }
+
+    public CreatedTrelloCartDto performCartCreationWithEmailNotification(final TrelloCardDto trelloCardDto) throws BadRequestException {
+        TrelloCard trelloCard = mapperCarts.toEntity(trelloCardDto);
+        trelloValidator.validateCard(trelloCard);
+        CreatedTrelloCartDto response = trelloClientService.createCard(mapperCarts.toDto(trelloCard));
+        sendEmail(response, "Trello task", adminConfig.getAdminMail());
+        return response;
+    }
 }

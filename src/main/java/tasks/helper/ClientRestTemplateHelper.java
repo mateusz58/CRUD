@@ -1,6 +1,7 @@
 package tasks.helper;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JavaType;
@@ -60,8 +61,14 @@ public class ClientRestTemplateHelper {
 		return null;
 	}
 
-	public <T, R> T postForEntity(Class<T> clazz, String url, R body) {
+	public <T> T postForObject(URI url, Class<T> clazz) {
+		log.info("Attempt to post object with url {} and type {}",url, clazz.getName());
+		return restTemplate.postForObject(url, null, clazz);
+	}
+
+	public <T,R> T postForEntity(Class<T> clazz, String url, R body) {
 		HttpEntity<R> request = new HttpEntity<>(body);
+		log.info("Attemp to add object with url {} and body {}",url, body.toString());
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 		JavaType javaType = objectMapper.getTypeFactory().constructType(clazz);
 		return readValue(response, javaType);

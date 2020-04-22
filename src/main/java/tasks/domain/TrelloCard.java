@@ -1,26 +1,14 @@
 package tasks.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 @AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
-public final class TrelloCard {
-
-    private Long id;
+@Getter
+//@JsonIgnoreProperties(ignoreUnknown = true)
+public class TrelloCard {
     private String name;
     private String description;
     private String pos;
     private String listId;
-
-    public TrelloCard(String name, String description, String pos, String listId) {
-        this.name = name;
-        this.description = description;
-        this.pos = pos;
-        this.listId = listId;
-    }
 }

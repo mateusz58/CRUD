@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tasks.configuration.AdminConfig;
 import tasks.domain.Mail;
-import tasks.repository.TaskRepository;
+import tasks.dao.TaskDao;
 import tasks.service.EmailTemplateSelector;
 import tasks.service.SimpleEmailService;
 
@@ -28,7 +28,7 @@ public class EmailSchedulerTest {
     private AdminConfig adminConfig;
 
     @Mock
-    private TaskRepository taskRepository;
+    private TaskDao taskRepository;
 
     @Test
     public void sendInformationEmailTest() {

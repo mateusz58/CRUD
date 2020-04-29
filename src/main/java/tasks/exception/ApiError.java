@@ -27,5 +27,4 @@ class ApiError {
     private String message;
     private String debugMessage;
     private List<ApiSubError> subErrors;
-
 }

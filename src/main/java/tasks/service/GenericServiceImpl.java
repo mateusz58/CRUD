@@ -85,13 +85,14 @@ public abstract class GenericServiceImpl<Dto extends DTO<Long>, Entity extends E
             log.error(message);
             throw new IllegalArgumentException(message);
         }
-        Optional<Entity> dto = repository.findById(object.getId());
-        if (dto.isPresent()) {
-            String message = BadRequestException.messageEntityExists(getGenericClassName(), object.getId());
-            log.error(message);
-            throw new BadRequestException(BadRequestException.messageEntityExists(getGenericClassName(), object.getId()));
+        if(object.getId() != null) {
+            if (existsById(object.getId())) {
+                String message = BadRequestException.messageEntityExists(getGenericClassName(), object.getId());
+                log.error(message);
+                throw new BadRequestException(BadRequestException.messageEntityExists(getGenericClassName(), object.getId()));
+            }
         }
-        log.debug(String.format("Creating %s entity with id %d", getGenericClassName(), object.getId()));
+        log.debug("Creating {} entity of object with id {}", getGenericClassName(), object.getId());
         return mapper.toDto(repository.save(mapper.toEntity(object)));
     }
 

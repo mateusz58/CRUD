@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My welcome page</title>
+</head>
+<body>
+<h1>First impressions of my page</h1>
+
+<!--/*thymesVar id="variable" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<span th:text="${variable}"></span>
+<br>
+<!--/*thymesVar id="one" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<!--/*thymesVar id="two" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<!--<span th:text="${one} + ${two}"></span>--> <!-- commented -->
+<br>
+<!--/*@thymesVar id="two" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<!--/*@thymesVar id="firstEquation" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<!--/*@thymesVar id="secondEquation" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<!--/*@thymesVar id="thirdEquation" type="com.crud.tasks.controller.StaticWebPageController"*/-->
+<span th:text="${firstEquation}"></span>
+<span th:text="${two} * ${two}"></span>
+<br>
+<span th:text="${secondEquation}"></span>
+<span th:text="${two} * ${two} + ${two}"></span>
+<br>
+<span th:text="${thirdEquation}"></span>
+<span th:text="${two} - ${two} * ${two}"></span>
+
+</body>
+</html>

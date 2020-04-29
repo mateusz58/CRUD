@@ -14,6 +14,7 @@ import tasks.service.BasicCrudServiceInterface;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.ParameterizedType;
 
+@CrossOrigin(origins = "*")
 public abstract class AbstractCrudController<Dto extends DTO> {
 
     protected static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -24,22 +25,21 @@ public abstract class AbstractCrudController<Dto extends DTO> {
         this.service = service;
     }
 
-    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAll() {
-        log.debug(String.format("Fetching all %s entites from database", getGenericName()));
+        log.debug("Fetching all {} entites from database", getGenericName());
         return ResponseEntity.ok(service.getAll());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@Validated @RequestBody Dto entity) throws BadRequestException {
+    public ResponseEntity<?> create(@Validated  Dto entity) throws BadRequestException {
         if (entity == null) {
             String message = String.format("Request for %s  is null", entity.getClass());
             log.error(message);
-            throw new IllegalArgumentException(String.format(message, entity.getClass()));
+            throw new IllegalArgumentException(message);
         }
-        log.debug(String.format("Creating %s entity in database", getGenericName()));
+        log.debug("Creating {} entity in database", getGenericName());
         return new ResponseEntity(service.create(entity), HttpStatus.CREATED);
     }
 
@@ -61,7 +61,7 @@ public abstract class AbstractCrudController<Dto extends DTO> {
             log.error(message);
             throw new BadRequestException(message);
         }
-        log.debug("Updating entity %s in database with id %d", getGenericName(), id);
+        log.debug("Updating entity {} in database with id {}", getGenericName(), id);
         return new ResponseEntity(service.updateById(entity), HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public abstract class AbstractCrudController<Dto extends DTO> {
             log.error(message);
             throw new IllegalArgumentException(message);
         }
-        log.debug("Updating entity %s in database", getGenericName());
+        log.debug("Updating entity {} in database", getGenericName());
         service.deleteById(id);
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractCrudController<Dto extends DTO> {
             log.error(message);
             throw new IllegalArgumentException(message);
         }
-        log.debug("Fetching entity %s in database with id", getGenericName(), id);
+        log.debug("Fetching entity {} in database with id {}", getGenericName(), id);
         return new ResponseEntity(service.getById(id), HttpStatus.OK);
     }
 

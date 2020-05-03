@@ -25,6 +25,7 @@ public abstract class AbstractCrudController<Dto extends DTO> {
         this.service = service;
     }
 
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getAll() {
         log.debug("Fetching all {} entites from database", getGenericName());
